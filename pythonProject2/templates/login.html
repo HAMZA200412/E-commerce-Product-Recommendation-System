@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce</title>
+    <link rel="stylesheet" href="static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="illustration">
+            <img src="static/ecommerce.jpg" alt="Illustration">
+        </div>
+        <div class="forms-container">
+            <div class="form login-form">
+                <h2>Login</h2>
+                <form action="login" method="POST">
+                    <div class="input-group">
+                        <input type="text" name="username" placeholder="Username or email" required>
+                        <i class="fa fa-user"></i>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" name="password" placeholder="Password" required>
+                        <i class="fa fa-lock"></i>
+                    </div>
+                    <div class="options">
+                        <label><input type="checkbox" name="remember"> Keep me signed in</label>
+                        <a href="#">Forgot your password?</a>
+                    </div>
+                    <button type="submit">Login</button>
+                    <p>Don't have an account? <a href="#" id="show-signup">Sign Up</a></p>
+                </form>
+            </div>
+
+            <div class="form signup-form" style="display:none;">
+                <h2>Sign Up</h2>
+                <form action="signup" method="POST">
+                    <div class="input-group">
+                        <input type="text" name="username" placeholder="Username" required>
+                        <i class="fa fa-user"></i>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" name="email" placeholder="Email" required>
+                        <i class="fa fa-envelope"></i>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" name="password" placeholder="Password" required>
+                        <i class="fa fa-lock"></i>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+                        <i class="fa fa-lock"></i>
+                    </div>
+                    <button type="submit">Sign Up</button>
+                    <p>Already have an account? <a href="#" id="show-login">Login</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const showSignup = document.getElementById('show-signup');
+        const showLogin = document.getElementById('show-login');
+        const loginForm = document.querySelector('.login-form');
+        const signupForm = document.querySelector('.signup-form');
+
+        showSignup.addEventListener('click', () => {
+            loginForm.style.display = 'none';
+            signupForm.style.display = 'block';
+        });
+
+        showLogin.addEventListener('click', () => {
+            signupForm.style.display = 'none';
+            loginForm.style.display = 'block';
+        });
+    </script>
+</body>
+</html>

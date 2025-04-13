@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ category_name }} - Products</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar-custom {
+            background-color: #00203FFF;
+            border-bottom: 1px solid #ddd;
+        }
+        .product-card img {
+            width: 100%;
+            height: auto;
+        }
+        .product-card {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .product-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin: 10px 0 5px;
+        }
+        .product-price {
+            color: #ff4e50;
+            font-size: 1.2em;
+        }
+        .product-rating {
+            color: #FFD700;
+            margin-bottom: 5px;
+        }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+        .btn-custom-primary {
+            background-color: #00203FFF;
+            border-color: #00203FFF;
+            color: white;
+        }
+        .btn-custom-primary:hover {
+            background-color: #001a2b; /* Optional: darker shade for hover effect */
+            border-color: #001a2b;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='ELO-removebg-preview.png') }}" width="50" height="50" alt="Logo">
+            </a>
+            <div class="search-container">
+                <!-- Updated Search Form -->
+                <form class="form-inline my-2 my-lg-0" action="{{ url_for('search') }}" method="POST">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="query">
+                    <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="btn btn-outline-light" href="{{ url_for('logout') }}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>{{ category_name }}</h1>
+        <div class="row">
+            {% for product in products %}
+            <div class="col-md-3">
+                <div class="product-card">
+                    <a href="{{ url_for('product_details', product_id=product['product_id']) }}" class="btn btn-custom-primary">
+                        <img src="{{ product['img_link'] }}" alt="{{ product['product_name'] }}">
+                    </a>
+                    <p class="product-name">{{ product['product_name'] }}</p>
+                    <p>{{ product['category'] }}</p>
+                    <div class="product-rating">
+                        {% for i in range(5) %}
+                            {% if i < product['rating']|int %}
+                                ★
+                            {% else %}
+                                ☆
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <p class="product-price">₹{{ product['discounted_price'] }}</p>
+                    <p><small><del>₹{{ product['actual_price'] }}</del></small></p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <a href="{{ url_for('home') }}" class="btn btn-custom-primary">Back to Home</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product['product_name'] }} - Product Details</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar-custom {
+            background-color: #00203FFF;
+            border-bottom: 1px solid #ddd;
+        }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+        .btn-custom-primary {
+            background-color: #00203FFF;
+            border-color: #00203FFF;
+            color: white;
+        }
+        .product-rating {
+            color: #FFD700;
+            margin-bottom: 5px;
+        }
+        .btn-custom-primary:hover {
+            background-color: #001a2b; /* Optional: darker shade for hover effect */
+            border-color: #001a2b;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='ELO-removebg-preview.png') }}" width="50" height="50" alt="Logo">
+            </a>
+            <div class="search-container">
+                <!-- Updated Search Form -->
+                <form class="form-inline my-2 my-lg-0" action="{{ url_for('search') }}" method="POST">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="query">
+                    <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+            <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="btn btn-outline-light" href="{{ url_for('logout') }}">Logout</a>
+            </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>{{ product['product_name'] }}</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <img src="{{ product['img_link'] }}" alt="{{ product['product_name'] }}" class="img-fluid">
+            </div>
+            <div class="col-md-6">
+                <h2>₹{{ product['discounted_price'] }}</h2>
+                <p><del>₹{{ product['actual_price'] }}</del></p>
+                <p>{{ product['about_product'] }}</p>
+                <p>Category: {{ product['category'] }}</p>
+                <div class="product-rating">
+                    {% for i in range(5) %}
+                        {% if i < product['rating']|int %}
+                            ★
+                        {% else %}
+                            ☆
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <h3 class="my-4">A Review</h3>
+        <div class="row">
+            <p>{{ product['review_content'] }}</p>
+        </div>
+        <h3 class="my-4">Recommended Products</h3>
+        <div class="row">
+            {% for rec_product in recommendations %}
+            <div class="col-md-3">
+                <div class="product-card">
+                    <a href="{{ url_for('product_details', product_id=rec_product['product_id']) }}" class="btn btn-custom-primary">
+                        <img src="{{ rec_product['img_link'] }}" alt="{{ rec_product['product_name'] }}" class="img-fluid">
+                    </a>
+                    <p class="product-name">{{ rec_product['product_name'] }}</p>
+                    <p class="product-price">₹{{ rec_product['discounted_price'] }}</p>
+                    <p><small><del>₹{{ rec_product['actual_price'] }}</del></small></p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <a href="{{ url_for('home') }}" class="btn btn-custom-primary">Back to Home</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

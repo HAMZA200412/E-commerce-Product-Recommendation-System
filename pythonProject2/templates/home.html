@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Home</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar-custom {
+            background-color: #00203FFF;
+            border-bottom: 1px solid #ddd;
+        }
+        .categories {
+            background-color: #bac1f7;
+            padding: 10px 0;
+        }
+        .categories a {
+            color: #333;
+            margin: 0 10px;
+        }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 100vh; /* This makes the hero section fill the entire viewport height */
+            overflow: hidden;
+        }
+        .hero-section video {
+            width: 100%;
+            height: 100%; /* Ensures the video fills the height of the container */
+            object-fit: cover; /* Ensures the video covers the container without stretching */
+        }
+        .categories-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .category-icon {
+            text-align: center;
+            font-size: 1.2em;
+        }
+        .category-icon img {
+            width: 50px;
+            height: 50px;
+        }
+        .product-card img {
+            width: 100%;
+            height: auto;
+        }
+        .product-card {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .product-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin: 10px 0 5px;
+        }
+        .product-price {
+            color: #ff4e50;
+            font-size: 1.2em;
+        }
+        .product-rating {
+            color: #FFD700;
+            margin-bottom: 5px;
+        }
+        .btn-custom-primary {
+            background-color: #00203FFF;
+            border-color: #00203FFF;
+            color: white;
+        }
+        .btn-custom-primary:hover {
+            background-color: #001a2b; /* Optional: darker shade for hover effect */
+            border-color: #001a2b;
+            color: white;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">
+                <img src="static/ELO-removebg-preview.png" width="50" height="50" alt="Logo">
+            </a>
+            <div class="search-container">
+                <!-- Updated Search Form -->
+                <form class="form-inline my-2 my-lg-0" action="{{ url_for('search') }}" method="POST">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="query">
+                    <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+            <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="btn btn-outline-light" href="{{ url_for('logout') }}">Logout</a>
+            </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Categories Bar -->
+    <div class="categories">
+        <div class="container">
+            <div class="d-flex justify-content-start">
+                <a href="#categories-icons" class="categories-link">Categories</a>
+                <a href="#" class="categories-link">Home</a>
+                <a href="#trending-products" class="categories-link">Trending Products</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section with Video -->
+    <div class="hero-section">
+        <video autoplay muted loop>
+            <source src="static/ecom_vid.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <!-- Categories Icons -->
+<div id="categories-icons" class="container">
+    <h2 class="my-4">Categories:</h2>
+    <div class="categories-container">
+        <div class="category-icon">
+            <a href="{{ url_for('category_products', category_name='Electronics') }}">
+                <img src="static/electronics.png" alt="Electronics">
+                <p>Electronics and Computer Accessories</p>
+            </a>
+        </div>
+        <div class="category-icon">
+            <a href="{{ url_for('category_products', category_name='Home&Kitchen') }}">
+                <img src="static/Kitchen.png" alt="home">
+                <p>Home & Kitchen</p>
+            </a>
+        </div>
+        <div class="category-icon">
+            <a href="{{ url_for('category_products', category_name='OfficeProducts') }}">
+                <img src="static/office.png" alt="office">
+                <p>Office Products</p>
+            </a>
+        </div>
+        <div class="category-icon">
+            <a href="{{ url_for('category_products', category_name='Toys&Games') }}">
+                <img src="static/toys.png" alt="Toys">
+                <p>Toys & Games</p>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Trending Products -->
+    <div id="trending-products" class="container">
+    <h2 class="my-4">Trending Products 2024</h2>
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-3">
+            <div class="product-card">
+                <a href="{{ url_for('product_details', product_id=product['product_id']) }}" class="btn btn-custom-primary">
+                    <img src="{{ product['img_link'] }}" alt="{{ product['product_name'] }}">
+                </a>
+                <p class="product-name">{{ product['product_name'] }}</p>
+                <p>{{ product['category'] }}</p>
+                <div class="product-rating">
+                    {% for i in range(5) %}
+                        {% if i < product['rating']|int %}
+                            ★
+                        {% else %}
+                            ☆
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <p class="product-price">₹{{ product['discounted_price'] }}</p>
+                <p><small><del>₹{{ product['actual_price'] }}</del></small></p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    </div>
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
